@@ -8,11 +8,14 @@
     <title>vl RSS Feed</title>
     <link>https://vaughnli.</link>
     <description>The official RSS Feed for https://vaughnli.</description>
-    <pubDate>Fri, 24 Jan 2025 20:17:29 +0800</pubDate>
+    <pubDate>Fri, 24 Jan 2025 20:20:35 +0800</pubDate>
     <item>
       <title>童年回忆</title>
       <link>https://vaughnli./posts/Memory/</link>
       <description>&lt;h1 id=&quot;section&quot;&gt;童年回忆&lt;/h1&gt;
+
+&lt;p&gt;2022-11-12&lt;/p&gt;
+
 &lt;p&gt;本想找90年代的相关记录片和论文，以便梳理那个年代的整体画像。但经过几次搜索后，并未找到令人满意的材料。目前我只能通过回忆90年代的个人生活，试图从中找到一些印记，也尝试找到自己为何喜欢老派生活的答案。
 UP主本人生于80年代，有童年的记忆主要集中在90年代， 我会从玩具、食物、娱乐、礼物等方面说起。&lt;/p&gt;
 
@@ -60,8 +63,8 @@ UP主本人生于80年代，有童年的记忆主要集中在90年代， 我会�
 
 &lt;p&gt;不合大流的生活方式，其实都是老派。老派这个词，并非贬义。流行的东西不见得都好，陈旧的东西也并非一无是处，重要的是你能分辨自己真正喜欢的方式，并守护好它。&lt;/p&gt;
 </description>
-      <pubDate>Fri, 24 Jan 2025 12:00:00 +0800</pubDate>
-      <dc:date>2025-01-24T12:00:00+08:00</dc:date>
+      <pubDate>Sat, 12 Nov 2022 12:00:00 +0800</pubDate>
+      <dc:date>2022-11-12T12:00:00+08:00</dc:date>
     </item>
     <item>
       <title>遇见姣姣</title>
@@ -314,6 +317,6 @@ UP主本人生于80年代，有童年的记忆主要集中在90年代， 我会�
       <pubDate>Tue, 01 Jan 2019 12:00:00 +0800</pubDate>
       <dc:date>2019-01-01T12:00:00+08:00</dc:date>
     </item>
-    <dc:date>2025-01-24T20:17:29+08:00</dc:date>
+    <dc:date>2025-01-24T20:20:35+08:00</dc:date>
   </channel>
 </rss>
