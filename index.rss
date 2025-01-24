@@ -8,7 +8,7 @@
     <title>bt RSS Feed</title>
     <link>https://btxx.org</link>
     <description>The official RSS Feed for https://btxx.org</description>
-    <pubDate>Fri, 24 Jan 2025 14:13:41 +0800</pubDate>
+    <pubDate>Fri, 24 Jan 2025 15:26:31 +0800</pubDate>
     <item>
       <title>Deliver the Bare Minimum</title>
       <link>https://btxx.org/posts/bare/</link>
@@ -15814,6 +15814,6 @@ button.cancel {
       <pubDate>Tue, 28 Jun 2016 12:00:00 +0800</pubDate>
       <dc:date>2016-06-28T12:00:00+08:00</dc:date>
     </item>
-    <dc:date>2025-01-24T14:13:41+08:00</dc:date>
+    <dc:date>2025-01-24T15:26:31+08:00</dc:date>
   </channel>
 </rss>
