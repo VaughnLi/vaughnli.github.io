@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="light dark">
+	<link rel="icon" href="data:,">
+	<title>Launching Sublime Text with dmenu on Alpine Linux</title>
+	<link href="/index.rss" type="application/rss+xml" rel="alternate" title="RSS feed for blog posts" />
+	<link rel="stylesheet" href="/public/style.css?v=1.0">
+</head>
+
+<header id="top">
+	<nav>
+		<a href="/"><b>btxx.org</b></a><span> | </span><a href="#menu">Menu</a>
+	</nav>
+</header>
+
+<main>
+<h1 id="launching-sublime-text-with-dmenu-on-alpine-linux">Launching Sublime Text with dmenu on Alpine Linux</h1>
+
+<p>2023-04-13</p>
+
+<p>Everyone seems to be running some version of VSCode as their main editor these days. But not me. I find VSCode to be too bloated for my needs - not to mention being built on top of electron instead of <em>native</em> code. I prefer running programs that don’t try to devour all of my machine’s available memory or spike my CPU.</p>
+
+<blockquote>
+  <p><strong>Note</strong>: It’s important to remember my personal machine is a ThinkPad X201 with only 6GB of RAM (plan to upgrade to 8GB soon!). Obviously your mileage may vary if you’re using a beefier laptop or desktop…</p>
+</blockquote>
+
+<p>In case the title of this post didn’t make this obvious, my editor of choice is Sublime Text. It’s fast, has a robust plugin ecosystem, and a very friendly community of users. Because of its popularity, troubleshooting any issues you might encounter becomes much easier with the amount of information freely available online.</p>
+
+<p>The only minor downside is that it isn’t <em>fully</em> open source. Personally, I think it is well worth buying a license directly from the developers to support their efforts.</p>
+
+<p>If you haven’t played around with it yet, I highly recommend giving it a try. At the very least, I guarantee you’ll be impressed with the editor’s performance and speed! <sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup></p>
+
+<h2 id="one-small-problem">One Small Problem…</h2>
+
+<p>Sublime is precompiled against glibc and Alpine uses musl. This makes things a little difficult. Luckily we can get around this roadblock by falling back on flatpak (which is unfortunately still locked at version 3 for Sublime).</p>
+
+<p>You’ll need to install flatpak, give your current user permission to install flatpak apps, and then install Sublime.</p>
+
+<p>(The following snippets assume you are using <code>doas</code>. If you are using <code>sudo</code>, be sure to swap accordingly)</p>
+
+<pre><code class="language-sh">apk add flatpak
+adduser &lt;YourUsername&gt; flatpak
+flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+</code></pre>
+
+<p>Congrats. You now have setup <code>flatpak</code> on your machine! Next we install Sublime Text:</p>
+
+<pre><code class="language-sh">flatpak install flathub com.sublimetext.three
+</code></pre>
+
+<p>You could stop now and simply open Sublime anytime by running the following command in your terminal:</p>
+
+<pre><code class="language-sh">flatpak run com.sublimetext.three
+</code></pre>
+
+<p>This works perfectly fine but I find it a little cumbersome. I would much rather open my programs directly through dmenu. Let’s set that up.</p>
+
+<h2 id="creating-system-links">Creating System Links</h2>
+
+<pre><code class="language-sh">doas ln -s ~/.local/share/flatpak/exports/bin/com.sublimetext.three /usr/bin/sublimetext
+</code></pre>
+
+<p>Now that those directories are linked, simply open dmenu and start typing <code>sublimetext</code>. Done and done. No more terminal commands needed to open Sublime!</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>I am aware that using a terminal-based editor such as vim or emacs would be even <em>more</em> efficient. For my own personal use I find more classical “IDE” applications to work best for me. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+</main>
+
+<footer role="contentinfo">
+    <nav id="menu">
+        <ul>
+            <li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/projects">Projects</a></li><li><a href="/uses">Uses</a></li><li><a href="/wiki">Wiki</a></li><li><a href="/resume">Resume</a></li><li><a href="/colophon">Colophon</a></li><li><a href="/now">Now</a></li><li><a href="/pizza">Pizza</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/index.rss">RSS</a></li><li><a href="#top">&uarr; Top</a></li>
+        </ul>
+    </nav>
+    <small>
+        Built with <a href="https://wruby.btxx.org">wruby</a> <br>
+        Running on <a href="https://openbsd.org">OpenBSD</a> via <a href="https://billing.linveo.com/order/forms/a/MTM4Ng==">Linveo</a><br>
+        Supporter of <a href="https://nextdns.io/?from=74d3p3h8">NextDNS</a> & <a href="https://usefathom.com/ref/DKHJVX">Fathom Analytics</a><br/>
+        The content for this site is <a
+          href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a><br>
+        The <a href="https://git.sr.ht/~bt/btxx.org">code for this site</a>
+        is <a href="https://git.sr.ht/~bt/btxx.org/tree/master/item/LICENSE">MIT</a>
+    </small>
+</footer>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="light dark">
+	<link rel="icon" href="data:,">
+	<title>CSS Slope Graphs</title>
+	<link href="/index.rss" type="application/rss+xml" rel="alternate" title="RSS feed for blog posts" />
+	<link rel="stylesheet" href="/public/style.css?v=1.0">
+</head>
+
+<header id="top">
+	<nav>
+		<a href="/"><b>btxx.org</b></a><span> | </span><a href="#menu">Menu</a>
+	</nav>
+</header>
+
+<main>
+<h1 id="css-slope-graphs">CSS Slope Graphs</h1>
+
+<p>2021-06-07</p>
+
+<p><em>I am a huge sucker for simplistic and beautifully designed visual data on the web</em>. Most data tends to be graphed via line or bar systems - which is fine - but I think slope graphs are highly underrated. Let’s change that, shall we?</p>
+
+<h2 id="the-demo">The Demo</h2>
+
+<p>I’m basing this demo off the design patterns found in <a href="https://www.edwardtufte.com/tufte/books_vdqi">Edward Tufte’s visualization work</a>, specifically his slope graph designs:</p>
+
+<p><a href="https://codepen.io/bradleytaunt/pen/jOBzXMe">Live CodePen Example</a></p>
+
+<h2 id="the-html">The HTML</h2>
+
+<p>For this concept we will actually be building this graph out of <code>tables</code> - crazy, right? The greatest benefit of rendering all the data inside of a <code>table</code> element is the ability to easily support smaller screens and mobile devices. Larger viewports will get to see the pretty slope graph, while those below a certain threshold will view a simple table.</p>
+
+<p>(But more on that in the CSS section)</p>
+
+<pre><code class="language-html">&lt;p&gt;Sales of the leading frozen pizza brands of the United States from 2011 to 2017 (in million US dollars) &lt;br&gt;&lt;em&gt;Source: Statisa 2018&lt;/em&gt;&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Pizza Brand&lt;/th&gt;
+      &lt;th&gt;2011&lt;/th&gt;
+      &lt;th&gt;2017&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-set="677.0"&gt;DiGiorno&lt;/td&gt;
+      &lt;td&gt;&lt;span&gt;677.0&lt;/span&gt;&lt;/td&gt;
+      &lt;td data-name="DiGiorno"&gt;1014.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td data-set="294.8"&gt;Private Label&lt;/td&gt;
+      &lt;td&gt;&lt;span&gt;294.8&lt;/span&gt;&lt;/td&gt;
+      &lt;td data-name="Private Label"&gt;524.8&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td data-set="286.1"&gt;Red Baron&lt;/td&gt;
+      &lt;td&gt;&lt;span&gt;286.1&lt;/span&gt;&lt;/td&gt;
+      &lt;td data-name="Red Baron"&gt;572.3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td data-set="257.9"&gt;Tombstone&lt;/td&gt;
+      &lt;td&gt;&lt;span&gt;257.9&lt;/span&gt;&lt;/td&gt;
+      &lt;td data-name="Tombstone"&gt;270.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td data-set="164.5"&gt;Totino's Party Pizza&lt;/td&gt;
+      &lt;td&gt;&lt;span&gt;164.5&lt;/span&gt;&lt;/td&gt;
+      &lt;td data-name="Totino's Party Pizza"&gt;347.2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+
+<p>As you can see, nothing too fancy is happpening here. Pay close attention to the <code>data-set</code> and <code>data-name</code> variables though - those will be important for the CSS portion of this design, mainly the rendering of the line elements.</p>
+
+<h2 id="the-css">The CSS</h2>
+
+<p>To avoid overwhelming your brain all-at-once, let’s break the CSS down into bite-sized chunks, starting with the base styling:</p>
+
+<pre><code class="language-css">@import url('https://opentype.netlify.com/et-book/index.css');
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  background: #fffff8;
+  font-family: "et-book", serif;
+  height: 100%;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 0.5rem;
+}
+
+p {
+  font-size: 18px;
+  margin: 4rem 0 6rem;
+}
+
+table {
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+}
+</code></pre>
+
+<p>Pretty basic stuff.</p>
+
+<p>Now we need to design how our slope graph will look on larger screens / desktops. For this instance, we will target these larger devices with a <code>min-width</code> media query of <code>800px</code>. The rest of the CSS might look a little confusing but I assure you it is quite simple.</p>
+
+<ol>
+  <li>On larger devices we hide the first <code>thead tr th</code> element with <code>display: none</code></li>
+  <li>The first and second <code>td</code> elements inside each <code>tbody</code> row need to be set as <code>position: absolute</code> to avoid duplicate content</li>
+  <li>The inner <code>span</code> that we include in our HTML inside the second <code>tbody tr td</code> also needs to be <code>display: none</code></li>
+  <li>Remember that <code>data-set</code> variable? We now use that for our <code>:before</code> pseudo element for <code>table tbody tr td:nth-of-type(1)</code></li>
+  <li>Remember that <code>data-name</code> variable? We now use that for our <code>:before</code> pseudo element for <code>table tbody tr td:nth-of-type(3)</code></li>
+  <li>After that, you can see the simple customization we include to render the angle / position of the slope lines and the corresponding labels</li>
+</ol>
+
+<pre><code class="language-css">@media(min-width:800px) {
+  table {
+    display: block;
+    position: relative;
+    margin-bottom: 25rem;
+  }
+
+  table thead th {
+    border-bottom: 1px solid lightgrey;
+    font-size: 24px;
+    position: absolute;
+    top: -50px;
+    width: 45%;
+  }
+  table thead th:nth-child(1){ display: none; }
+  table thead th:nth-child(2){ left: 0; }
+  table thead th:nth-child(3){ right: 0; text-align: right; }
+
+  table tbody tr td:nth-of-type(1),
+  table tbody tr td:nth-of-type(2) { position: absolute;}
+
+  table tbody tr td:nth-of-type(2) span { display: none; }
+  table tbody tr td:nth-of-type(1):before {
+    content: attr(data-set);
+    margin-right: 10px;
+    position: relative;
+  }
+
+  table tbody tr td:nth-of-type(2) { padding-left: 10px; }
+
+  table tbody tr td:nth-of-type(3) {
+    position: absolute;
+    right: 0;
+  }
+  table tbody tr td:nth-of-type(3):before {
+    content: attr(data-name);
+    margin-right: 10px;
+    position: relative;
+  }
+
+  /* Custom individual slopes -- Left */
+  tbody tr:nth-child(1) td:nth-child(1),
+  tbody tr:nth-child(1) td:nth-child(2) { top: 60px; }
+  tbody tr:nth-child(2) td:nth-child(1),
+  tbody tr:nth-child(2) td:nth-child(2) { top: 140px; }
+  tbody tr:nth-child(3) td:nth-child(1),
+  tbody tr:nth-child(3) td:nth-child(2) { top: 165px; }
+  tbody tr:nth-child(4) td:nth-child(1),
+  tbody tr:nth-child(4) td:nth-child(2) { top: 220px; }
+  tbody tr:nth-child(5) td:nth-child(1),
+  tbody tr:nth-child(5) td:nth-child(2) { top: 270px; }
+
+  /* Custom individual slopes -- Right */
+  [data-name="DiGiorno"] { top: 0; }
+  [data-name="Red Baron"] { top: 65px; }
+  [data-name="Private Label"] { top: 100px; }
+  [data-name="Tombstone"] { top: 180px; }
+  [data-name="Totino's Party Pizza"] { top: 150px; }
+
+  /* The custom visual lines */
+  tbody tr:after {
+    background: black;
+    content: '';
+    height: 1px;
+    left: 14.5%;
+    position: absolute;
+    width: 70%;
+  }
+  tbody tr:nth-child(1):after {
+    top: 40px;
+    transform: rotate(-6deg);
+  }
+  tbody tr:nth-child(2):after {
+    left: 17.5%;
+    top: 130px;
+    transform: rotate(-4deg);
+    width: 65%;
+  }
+  tbody tr:nth-child(3):after {
+    left: 15%;
+    top: 125px;
+    transform: rotate(-10.25deg);
+    width: 70%;
+  }
+  tbody tr:nth-child(4):after {
+    left: 16%;
+    top: 210px;
+    transform: rotate(-4deg);
+    width: 68%;
+  }
+  tbody tr:nth-child(5):after {
+    left: 22%;
+    top: 222px;
+    transform: rotate(-16deg);
+    width: 56%;
+  }
+}
+</code></pre>
+
+<p>All that’s left are some minor styles to make everything look nice on mobile:</p>
+
+<pre><code class="language-css">@media(max-width:800px) {
+  p {
+    margin: 2rem 0;
+  }
+  table td, table th {
+    border-bottom: 1px solid grey;
+    padding: 10px;
+  }
+  table td:last-of-type, table th:last-of-type {
+    text-align: right;
+  }
+}
+</code></pre>
+
+<h2 id="not-the-most-practical">Not the most practical</h2>
+<p>This slope graph concept is far from perfect for use in real-world situations. The fact that you need to manually render each point of data yourself makes this implementation quite annoying for more in-depth projects.</p>
+
+<p>But it was fun to mess around with and create, so who cares!</p>
+</main>
+
+<footer role="contentinfo">
+    <nav id="menu">
+        <ul>
+            <li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/projects">Projects</a></li><li><a href="/uses">Uses</a></li><li><a href="/wiki">Wiki</a></li><li><a href="/resume">Resume</a></li><li><a href="/colophon">Colophon</a></li><li><a href="/now">Now</a></li><li><a href="/pizza">Pizza</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/index.rss">RSS</a></li><li><a href="#top">&uarr; Top</a></li>
+        </ul>
+    </nav>
+    <small>
+        Built with <a href="https://wruby.btxx.org">wruby</a> <br>
+        Running on <a href="https://openbsd.org">OpenBSD</a> via <a href="https://billing.linveo.com/order/forms/a/MTM4Ng==">Linveo</a><br>
+        Supporter of <a href="https://nextdns.io/?from=74d3p3h8">NextDNS</a> & <a href="https://usefathom.com/ref/DKHJVX">Fathom Analytics</a><br/>
+        The content for this site is <a
+          href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a><br>
+        The <a href="https://git.sr.ht/~bt/btxx.org">code for this site</a>
+        is <a href="https://git.sr.ht/~bt/btxx.org/tree/master/item/LICENSE">MIT</a>
+    </small>
+</footer>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="light dark">
+	<link rel="icon" href="data:,">
+	<title>CSS Value: `currentColor`</title>
+	<link href="/index.rss" type="application/rss+xml" rel="alternate" title="RSS feed for blog posts" />
+	<link rel="stylesheet" href="/public/style.css?v=1.0">
+</head>
+
+<header id="top">
+	<nav>
+		<a href="/"><b>btxx.org</b></a><span> | </span><a href="#menu">Menu</a>
+	</nav>
+</header>
+
+<main>
+<h1 id="css-value-currentcolor">CSS Value: <code>currentColor</code></h1>
+
+<p>2019-04-13</p>
+
+<p><em>There are a large number of nuanced and mostly unheard of</em> CSS value types, but today we are going to focus on <code>currentColor</code>. So what is the <code>currentColor</code> value type anyway?</p>
+
+<blockquote>
+  <p>The currentColor value type will apply the existing color value to other properties like background-color, etc.</p>
+</blockquote>
+
+<h2 id="see-it-in-action">See it in action</h2>
+
+<p>Let’s assume with have a single div with the following properties:</p>
+
+<pre><code class="language-css">div {
+  color: dodgerblue;
+}
+</code></pre>
+
+<p>If we wanted to use that same color for other properties on elements inside that initial <code>div</code>, it’s simple - we just need to call <code>currentColor</code> like so:</p>
+
+<pre><code class="language-css">div {
+  color: dodgerblue;
+}
+
+div header {
+  background-color: currentColor;
+}
+
+div a {
+  border-bottom: 1px solid currentColor;
+}
+</code></pre>
+
+<p><strong>Sidenote</strong>: If you re-declare the default <code>color</code> property further along in your CSS, the <code>currentColor</code> value will update according to the last color set.</p>
+
+<p>And that’s it. Best of all, this value type is supported across all major browsers!</p>
+
+</main>
+
+<footer role="contentinfo">
+    <nav id="menu">
+        <ul>
+            <li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/projects">Projects</a></li><li><a href="/uses">Uses</a></li><li><a href="/wiki">Wiki</a></li><li><a href="/resume">Resume</a></li><li><a href="/colophon">Colophon</a></li><li><a href="/now">Now</a></li><li><a href="/pizza">Pizza</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/index.rss">RSS</a></li><li><a href="#top">&uarr; Top</a></li>
+        </ul>
+    </nav>
+    <small>
+        Built with <a href="https://wruby.btxx.org">wruby</a> <br>
+        Running on <a href="https://openbsd.org">OpenBSD</a> via <a href="https://billing.linveo.com/order/forms/a/MTM4Ng==">Linveo</a><br>
+        Supporter of <a href="https://nextdns.io/?from=74d3p3h8">NextDNS</a> & <a href="https://usefathom.com/ref/DKHJVX">Fathom Analytics</a><br/>
+        The content for this site is <a
+          href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a><br>
+        The <a href="https://git.sr.ht/~bt/btxx.org">code for this site</a>
+        is <a href="https://git.sr.ht/~bt/btxx.org/tree/master/item/LICENSE">MIT</a>
+    </small>
+</footer>

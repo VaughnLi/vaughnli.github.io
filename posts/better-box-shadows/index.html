@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="light dark">
+	<link rel="icon" href="data:,">
+	<title>Better Box Shadows</title>
+	<link href="/index.rss" type="application/rss+xml" rel="alternate" title="RSS feed for blog posts" />
+	<link rel="stylesheet" href="/public/style.css?v=1.0">
+</head>
+
+<header id="top">
+	<nav>
+		<a href="/"><b>btxx.org</b></a><span> | </span><a href="#menu">Menu</a>
+	</nav>
+</header>
+
+<main>
+<h1 id="better-box-shadows">Better Box Shadows</h1>
+
+<p>2019-01-08</p>
+
+<style>
+  .message {
+      position: relative;
+      z-index: 1;
+  }
+  .box-container,
+  .box-container-depth {
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin: 2rem auto;
+    padding: 10px;
+    position: relative;
+    height: 200px;
+    width: 250px;
+  }
+  .box-container-depth { box-shadow: none; }
+  .box-container-depth .box-container-depth-inner {
+    bottom: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    content:'';
+    position: absolute;
+    width: 94%;
+    height: 94%;
+    left: 3%;
+    z-index: -1;
+  }
+  .box-container-depth-inner.blur {
+      filter: blur(6px);
+  }
+</style>
+
+<p>Box shadow on <abbr title="hypertext markup language">HTML</abbr> elements has been widely supported across most browsers for a while now, but I find the default options don’t allow for much visual manipulation of the shadows in general.</p>
+
+<p>Let’s take a look at a default configuration of <code>box-shadow</code>:</p>
+
+<pre><code class="language-css">.box-container {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+</code></pre>
+
+<p>In the example above the first property number is the origin of the <em>x-axis</em>, the second number is the origin of the <em>y-axis</em> and the third is the amount of <em>blur</em>.</p>
+
+<p>We should also add some minimal styling to cleanup the <code>.box-container</code> a little bit for our example:</p>
+
+<pre><code class="language-html">&lt;div class="box-container"&gt;&lt;/div&gt;
+</code></pre>
+
+<pre><code class="language-css">.box-container {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  /* Styles to make it less ugly */
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  height: 200px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+}
+</code></pre>
+
+<p>Which would render as this:</p>
+
+<div class="box-container"></div>
+
+<p>Not bad - but we can do a lot better than this.</p>
+
+<h2 id="please-sir-i-want-some-more-depth">Please sir, I want some more (depth)</h2>
+
+<p>We just need to add a simple child <code>div</code> (or use a <code>pseudo</code> element if you prefer) inside our main element we want to apply the shadow to:</p>
+
+<pre><code class="language-html">&lt;div class="box-container"&gt;
+  &lt;div class="box-container-inner"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>Now we make our inner child element <code>absolute</code> and set it’s <code>height</code> and <code>width</code> dynamically to be slightly smaller than it’s parent (percentages work best for this).</p>
+
+<p>Remember to set this child element behind it’s parent by adding <code>z-index: -1</code>.</p>
+
+<pre><code class="language-css">.box-container {
+  /* No box-shadow needed on this element anymore */
+  /* Styles to make it less ugly */
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  height: 200px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+}
+</code></pre>
+
+<h2 id="inner-containers">Inner Containers</h2>
+
+<p>We also need to target the <code>box-container-inner</code> element set inside the current parent to reflect our custom shadow styling:</p>
+
+<pre><code class="language-sh">.box-container-inner {
+  bottom: 0;
+  /* The box-shadow is added here now */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  height: 94%;
+  left: 3%;
+  position: absolute;
+  width: 94%;
+  z-index: -1;
+}
+</code></pre>
+
+<p>Which will make the drop-shadow render with a little more realistic depth:</p>
+
+<div class="box-container-depth"><span class="box-container-depth-inner"></span></div>
+
+<h2 id="but-wait---theres-more">But wait - there’s more!</h2>
+
+<p>We could stop now and have a decent drop-shadow that is certainly easier on the eyes - but we can make this even better with one extra property - <code>filter:blur();</code>.</p>
+
+<p>So your final code would look like this:</p>
+
+<pre><code class="language-css">.box-container {
+  /* Styles to make it less ugly */
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  height: 200px;
+  padding: 10px;
+  position: relative;
+  width: 250px;
+}
+
+.box-container-inner {
+  bottom: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  filter: blur(6px);
+  height: 94%;
+  left: 3%;
+  position: absolute;
+  width: 94%;
+  z-index: -1;
+}
+</code></pre>
+
+<p>Which renders out into a much smoother blend of a drop-shadow, creating a more realistic illusion of depth:</p>
+
+<div class="box-container-depth">
+  <span class="box-container-depth-inner blur"></span>
+</div>
+
+</main>
+
+<footer role="contentinfo">
+    <nav id="menu">
+        <ul>
+            <li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/projects">Projects</a></li><li><a href="/uses">Uses</a></li><li><a href="/wiki">Wiki</a></li><li><a href="/resume">Resume</a></li><li><a href="/colophon">Colophon</a></li><li><a href="/now">Now</a></li><li><a href="/pizza">Pizza</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/index.rss">RSS</a></li><li><a href="#top">&uarr; Top</a></li>
+        </ul>
+    </nav>
+    <small>
+        Built with <a href="https://wruby.btxx.org">wruby</a> <br>
+        Running on <a href="https://openbsd.org">OpenBSD</a> via <a href="https://billing.linveo.com/order/forms/a/MTM4Ng==">Linveo</a><br>
+        Supporter of <a href="https://nextdns.io/?from=74d3p3h8">NextDNS</a> & <a href="https://usefathom.com/ref/DKHJVX">Fathom Analytics</a><br/>
+        The content for this site is <a
+          href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a><br>
+        The <a href="https://git.sr.ht/~bt/btxx.org">code for this site</a>
+        is <a href="https://git.sr.ht/~bt/btxx.org/tree/master/item/LICENSE">MIT</a>
+    </small>
+</footer>

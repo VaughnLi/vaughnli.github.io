@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="color-scheme" content="light dark">
+	<link rel="icon" href="data:,">
+	<title>Pure CSS Bar Graphs with Graceful Mobile Fallbacks</title>
+	<link href="/index.rss" type="application/rss+xml" rel="alternate" title="RSS feed for blog posts" />
+	<link rel="stylesheet" href="/public/style.css?v=1.0">
+</head>
+
+<header id="top">
+	<nav>
+		<a href="/"><b>btxx.org</b></a><span> | </span><a href="#menu">Menu</a>
+	</nav>
+</header>
+
+<main>
+<h1 id="pure-css-bar-graphs-with-graceful-mobile-fallbacks">Pure CSS Bar Graphs with Graceful Mobile Fallbacks</h1>
+
+<p>2020-12-08</p>
+
+<p>I recently published a new open source project, <a target="_blank" href="https://flexbox-bar-graphs.netlify.app/">Flexbox Bar Graphs</a>, and wanted to share a simple breakdown of how it was built. It isn’t anything mind-blowing, but I like the idea of placing bar graphs in a web page with <em>zero</em> Javascript.</p>
+
+<p>So in the end, this is what our bar graphs will look like on desktop:</p>
+
+<figure>
+    <img src="/public/images/flexbox-bar-graph-1.webp" alt="Flexbox Bar Graph" />
+    <figcaption>The flexbox bar graph in desktop view (<a href="/public/images/flexbox-bar-graph-1.webp">direct link to image</a>)</figcaption>
+</figure>
+
+<p>And this is how it will look on smaller devices:</p>
+
+<figure>
+    <img src="/public/images/flexbox-bar-graph-2.webp" alt="Flexbox Bar Graph Table" />
+    <figcaption>The flexbox bar graph on mobile devices (<a href="/public/images/flexbox-bar-graph-2.webp">direct link to image</a>)</figcaption>
+</figure>
+
+<p>Let’s get into the details!</p>
+
+<h2 id="the-html">The HTML</h2>
+
+<p>The main “secret” of this project is that our graphs are constructed out of HTML <em>tables</em>. Now before you freak out - this is perfectly fine and works in our favor quite well.</p>
+
+<ol>
+  <li>If the user has JS disabled –&gt; they will still see our graphs</li>
+  <li>If the user has CSS disabled –&gt; they will see a standard data table set</li>
+</ol>
+
+<p>All bases are covered!</p>
+
+<pre><code class="language-html">&lt;!-- Using a basic table with our custom data-id --&gt;
+&lt;table data-id="flexbox-bar-graph"&gt;
+    &lt;caption&gt;Web Performance Results&lt;/caption&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Test Performed&lt;/th&gt;
+            &lt;th&gt;Before&lt;/th&gt;
+            &lt;th&gt;After&lt;/th&gt;
+            &lt;th&gt;Difference&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Initial Load Time&lt;/th&gt;
+            &lt;td&gt;
+                &lt;!--
+                    WTF are these CSS variables?
+                    See the CSS section below
+                --&gt;
+                &lt;span style="--data-set:4.7/5;"&gt;&lt;/span&gt;
+                &lt;p&gt;4.7&lt;/p&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+                &lt;span style="--data-set:2.7/5;"&gt;&lt;/span&gt;
+                &lt;p&gt;2.7&lt;/p&gt;
+            &lt;/td&gt;
+            &lt;td&gt;
+                &lt;span style="--data-set:2/5;"&gt;&lt;/span&gt;
+                &lt;p&gt;2&lt;/p&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+
+<p>Nothing crazy is happening here - just your standard HTML table structure. The one main thing to notice is the <code>--data-set</code> CSS variable placed inline on each data point. This will be important for our CSS to configure the individual bar graphs properly.</p>
+
+<h2 id="the-css">The CSS</h2>
+
+<p>This might look overwhelming if I just dumped the whole CSS file in one big code block, so instead I’m going to break them down into two parts:</p>
+
+<ol>
+  <li>Baseline styling (mobile)</li>
+  <li>Desktop styling</li>
+</ol>
+
+<h3 id="baseline">Baseline</h3>
+
+<p>Here we target just our table elements with the <code>data-id</code> of <code>flexbox-bar-graph</code>. This allows us to avoid worrying about adding classes or IDs and also avoids conflicts with other non-graph styled tables in our projects.</p>
+
+<p>The base <code>:root</code> element holds all of our bar graph colors. Change these as you see fit!</p>
+
+<pre><code class="language-css">/* Bar Graph color variables */
+:root {
+    --bar-color-1: #357EC7;
+    --bar-color-2: #E42217;
+    --bar-color-3: #4CC417;
+    --bar-color-4: #7D0541;
+    --bar-color-5: #FFD801;
+}
+</code></pre>
+
+<pre><code class="language-css">[data-id="flexbox-bar-graph"] {
+    border-collapse: collapse;
+    margin: 4rem 0 6rem;
+    width: 100%;
+}
+[data-id="flexbox-bar-graph"] caption {
+    text-align: left;
+}
+[data-id="flexbox-bar-graph"] thead th {
+    text-align: right;
+}
+[data-id="flexbox-bar-graph"] thead th:nth-child(1),
+[data-id="flexbox-bar-graph"] tbody th {
+    text-align: left;
+}
+[data-id="flexbox-bar-graph"] tbody th {
+    font-weight: normal;
+    font-style: italic;
+}
+[data-id="flexbox-bar-graph"] tbody td {
+    text-align: right;
+}
+[data-id="flexbox-bar-graph"] tbody td p {
+    margin: 0;
+}
+</code></pre>
+
+<h3 id="desktop">Desktop</h3>
+
+<p>Now we set your “visual” bar graphs to show at a set width (in this example it is 1000px and above). That way the “default” styling can target the mobile device screen sizes.</p>
+
+<ul>
+  <li>The <code>thead tr th:nth-child(x):before</code> elements create the square “legends” beside each individual data point heading</li>
+  <li>The <code>tbody tr td:nth-of-type(x) span</code> elements are the bars themselves</li>
+</ul>
+
+<pre><code class="language-css">@media(min-width: 1000px) {
+  [data-id="flexbox-bar-graph"] {
+    background: transparent;
+    display: block;
+    min-height: 400px;
+    padding: 0;
+    position: relative;
+    width: 100%;
+  }
+
+  [data-id="flexbox-bar-graph"] caption {
+    display: block;
+    font-size: 2rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  [data-id="flexbox-bar-graph"] thead {
+    display: block;
+    margin: 2rem 0 3rem;
+    width: 100%;
+  }
+  [data-id="flexbox-bar-graph"] thead tr {
+    border-bottom: 1px solid lightgrey;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+  }
+
+  [data-id="flexbox-bar-graph"] thead tr th {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    text-align: right;
+  }
+  [data-id="flexbox-bar-graph"] thead tr th:before {
+    content:'';
+    display: inline-block;
+    height: 10px;
+    margin: 0 0.5rem 0 2rem;
+    position: relative;
+    width: 10px;
+  }
+  [data-id="flexbox-bar-graph"] thead tr th:nth-child(1),
+  [data-id="flexbox-bar-graph"] thead tr th:nth-child(1):before {
+    display: none;
+  }
+  [data-id="flexbox-bar-graph"] thead tr th:nth-child(2):before {
+    background: var(--bar-color-1);
+  }
+  [data-id="flexbox-bar-graph"] thead tr th:nth-child(3):before {
+    background: var(--bar-color-2);
+  }
+  [data-id="flexbox-bar-graph"] thead tr th:nth-child(4):before {
+    background: var(--bar-color-3);
+  }
+  [data-id="flexbox-bar-graph"] thead tr th:nth-child(5):before {
+    background: var(--bar-color-4);
+  }
+  [data-id="flexbox-bar-graph"] thead tr th:nth-child(6):before {
+    background: var(--bar-color-5);
+  }
+
+  [data-id="flexbox-bar-graph"] tbody {
+    display: flex;
+    justify-content: space-between;
+    min-height: 300px;
+    width: 100%;
+  }
+
+  [data-id="flexbox-bar-graph"] tbody tr {
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    padding: 0 50px;
+    position: relative;
+    width: 100%;
+  }
+  [data-id="flexbox-bar-graph"] tbody tr th {
+    font-size: 90%;
+    position: absolute;
+    text-align: center;
+    top: 100%;
+    width: calc(100% - 100px);
+  }
+  [data-id="flexbox-bar-graph"] tbody tr td {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 95%;
+    justify-content: flex-end;
+  }
+
+  [data-id="flexbox-bar-graph"] tbody tr td span {
+    display: block;
+    height: calc(var(--data-set) * 100%);
+    width: 20px;
+  }
+  [data-id="flexbox-bar-graph"] tbody tr td:nth-of-type(1) span {
+    background: var(--bar-color-1);
+  }
+  [data-id="flexbox-bar-graph"] tbody tr td:nth-of-type(2) span {
+    background: var(--bar-color-2);
+  }
+  [data-id="flexbox-bar-graph"] tbody tr td:nth-of-type(3) span {
+    background: var(--bar-color-3);
+  }
+  [data-id="flexbox-bar-graph"] tbody tr td:nth-of-type(4) span {
+    background: var(--bar-color-4);
+  }
+  [data-id="flexbox-bar-graph"] tbody tr td:nth-of-type(5) span {
+    background: var(--bar-color-5);
+  }
+
+  [data-id="flexbox-bar-graph"] tbody tr td p {
+    font-size: 90%;
+    margin: 0;
+    text-align: center;
+  }
+}
+</code></pre>
+
+<h2 id="bonus-styling">Bonus Styling</h2>
+
+<p>In the <a target="_blank" href="https://github.com/bradleytaunt/flexbox-bar-graphs">Flexbox Bar Graph</a> repo, I’ve also included the ability to display these bar graphs horizontally, like so:</p>
+
+<figure>
+    <img src="/public/images/flexbox-bar-graph-3.webp" alt="Flexbox Bar Graph Horizontal" />
+    <figcaption>The flexbox bar graph in the horizontal layout (<a href="/public/images/flexbox-bar-graph-3.webp">direct link to image</a>)</figcaption>
+</figure>
+
+<p>The change in CSS is actually quite simple to pull this off - you just need to include the <code>data-layout</code> attribute on the table itself.</p>
+
+<pre><code class="language-css">[data-layout="horizontal"] tbody {
+    min-height: auto;
+}
+
+[data-layout="horizontal"] tbody tr {
+    flex-direction: column;
+    padding: 0 40px;
+}
+[data-layout="horizontal"] tbody tr th {
+    width: calc(100% - 80px);
+}
+
+[data-layout="horizontal"] tbody tr th {
+    text-align: left;
+    top: calc(100% + 20px);
+}
+
+[data-layout="horizontal"] tbody tr td {
+    flex-direction: row;
+    height: auto;
+    justify-content: start;
+    margin: 10px 0;
+}
+
+[data-layout="horizontal"] tbody tr td span {
+    height: 20px;
+    width: calc(var(--data-set) * 100%);
+}
+
+[data-layout="horizontal"] tbody tr td p {
+    margin-left: 10px;
+}
+</code></pre>
+
+<h2 id="thats-all-folks">That’s All Folks!</h2>
+
+<p>That just about sums things up. Feel free to check out the Github repo itself, open any issues you find or fork it for your own!</p>
+
+<ul>
+  <li>Github: <a href="https://github.com/bradleytaunt/flexbox-bar-graphs">https://github.com/bradleytaunt/flexbox-bar-graphs</a></li>
+  <li>Live Demo: <a href="https://flexbox-bar-graphs.netlify.app/">https://flexbox-bar-graphs.netlify.app/</a></li>
+</ul>
+
+</main>
+
+<footer role="contentinfo">
+    <nav id="menu">
+        <ul>
+            <li><a href="/">Home</a></li><li><a href="/about">About</a></li><li><a href="/projects">Projects</a></li><li><a href="/uses">Uses</a></li><li><a href="/wiki">Wiki</a></li><li><a href="/resume">Resume</a></li><li><a href="/colophon">Colophon</a></li><li><a href="/now">Now</a></li><li><a href="/pizza">Pizza</a></li><li><a href="/recipes">Recipes</a></li><li><a href="/index.rss">RSS</a></li><li><a href="#top">&uarr; Top</a></li>
+        </ul>
+    </nav>
+    <small>
+        Built with <a href="https://wruby.btxx.org">wruby</a> <br>
+        Running on <a href="https://openbsd.org">OpenBSD</a> via <a href="https://billing.linveo.com/order/forms/a/MTM4Ng==">Linveo</a><br>
+        Supporter of <a href="https://nextdns.io/?from=74d3p3h8">NextDNS</a> & <a href="https://usefathom.com/ref/DKHJVX">Fathom Analytics</a><br/>
+        The content for this site is <a
+          href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a><br>
+        The <a href="https://git.sr.ht/~bt/btxx.org">code for this site</a>
+        is <a href="https://git.sr.ht/~bt/btxx.org/tree/master/item/LICENSE">MIT</a>
+    </small>
+</footer>
