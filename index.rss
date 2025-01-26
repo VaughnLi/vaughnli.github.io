@@ -8,7 +8,7 @@
     <title>vl RSS Feed</title>
     <link>https://vaughnli.</link>
     <description>The official RSS Feed for https://vaughnli.</description>
-    <pubDate>Fri, 24 Jan 2025 20:42:26 +0800</pubDate>
+    <pubDate>Sun, 26 Jan 2025 10:55:12 +0800</pubDate>
     <item>
       <title>遇见姣姣</title>
       <link>https://vaughnli./posts/MeetLove/</link>
@@ -260,6 +260,6 @@
       <pubDate>Tue, 01 Jan 2019 12:00:00 +0800</pubDate>
       <dc:date>2019-01-01T12:00:00+08:00</dc:date>
     </item>
-    <dc:date>2025-01-24T20:42:26+08:00</dc:date>
+    <dc:date>2025-01-26T10:55:12+08:00</dc:date>
   </channel>
 </rss>
