@@ -87,7 +87,8 @@ blockquote {
     font-style: italic;
     font-size: 110%;
     border-left: 4px solid #ddd;
-    margin: 0;
+    margin-top: 0;
+    margin-bottom: 16px;
 }
 
 img {
