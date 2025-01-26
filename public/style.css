@@ -43,6 +43,7 @@ blockquote {
     font-style: italic;
     font-size: 110%;
     border-left: 4px solid #ddd;
+    margin: 0;
 }
 
 img {
