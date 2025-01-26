@@ -82,6 +82,7 @@ pre {
 }
 
 blockquote {
+    padding: 0 15px;
     color: #777;
     font-family: Optima, Palatino, Charter, "Bitstream Charter", serif;
     font-style: italic;
