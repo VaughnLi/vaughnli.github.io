@@ -1,0 +1,113 @@
+/*
+This file is released to the public domain.
+vaughn li - http://vaughn.li
+*/
+
+body {
+    color: #000000;
+    background-color: #FFFFFF;
+    /* margin: 0px 20px 0px 20px; */
+}
+
+body.dark {
+    color: #ddd;
+    background-color: #333;
+}
+
+a.glossary {
+    border: 1px solid red;
+    padding: 2px 2px;
+    display: inline-block;
+}
+
+a.dark {
+    color: #ff0;
+}
+
+a.dark:visited {
+    color: #aa0;
+}
+
+/* Need hover for accessibility */
+a:link:hover {
+    color: #9932CC;
+}
+
+
+li {
+    margin-bottom: 8px;
+}
+
+:link {
+    color: #1F00FF
+}
+
+:visited {
+    color: #9900DD
+}
+
+h3.c1 {
+    text-align: center;
+    font-size: 30px;
+    text-decoration: underline;
+}
+
+h3.c1.no-underline {
+    text-decoration: none;
+}
+
+.titlelink {
+    color: #000000;
+}
+
+.fullwide {
+    /* width: 900px; */
+    width: 100%;
+}
+
+
+
+sub {
+    line-height: 0.25em;
+    font-size: 70%;
+    vertical-align: -.05em;
+}
+
+sup {
+    line-height: 0.25em;
+    font-size: 70%;
+    vertical-align: 0.7em;
+}
+
+.footnote {
+    font-size: 90%;
+    padding-left: 0.9em;
+    text-indent: -0.9em;
+}
+
+.footnote sup {
+    line-height: 0.25em;
+    font-size: 78%;
+    vertical-align: 0.4em;
+}
+
+
+div.comp {
+    margin: 0 auto;
+    width: 98%;
+}
+
+
+h3 a {
+    text-decoration: none;
+}
+
+blockquote {
+    padding: 0 15px;
+    color: #777;
+    font-family: Optima, Palatino, Charter, "Bitstream Charter", serif;
+    font-style: italic;
+    border-left: 4px solid #ddd;
+    margin-top: 0;
+    margin-bottom: 16px;
+}
